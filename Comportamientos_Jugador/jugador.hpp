@@ -4,7 +4,9 @@
 #include "comportamientos/comportamiento.hpp"
 using namespace std;
 
+// Clase ComportamientoJugador
 class ComportamientoJugador : public Comportamiento{
+
 
   public:
 
@@ -26,10 +28,10 @@ class ComportamientoJugador : public Comportamiento{
     // Método interact --> descibe como interacciona agente con otros agentes
     int interact(Action accion, int valor);
 
+
   private:
   
-  // TO-DO: Declarar aquí las variables de estado que almacenan memoria sobre lo 
-  // que lleva conocido el agente sobre el mundo
+  // TO-DO: Declarar aquí las variables de estado que almacenan memoria sobre lo que lleva conocido el agente sobre el mundo
 };
 
 #endif
