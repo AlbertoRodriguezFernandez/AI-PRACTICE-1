@@ -14,6 +14,8 @@ class ComportamientoJugador : public Comportamiento{
     ComportamientoJugador(unsigned int size) : Comportamiento(size){
       
       // TO-DO: Dar el valor inicial a las variables de estado
+      last_action = actIDLE;
+      brujula = norte;
     }
 
     // Constructor de copia
@@ -32,6 +34,8 @@ class ComportamientoJugador : public Comportamiento{
   private:
   
   // TO-DO: Declarar aquí las variables de estado que almacenan memoria sobre lo que lleva conocido el agente sobre el mundo
+  Action last_action;
+  Orientacion brujula;
 };
 
 #endif

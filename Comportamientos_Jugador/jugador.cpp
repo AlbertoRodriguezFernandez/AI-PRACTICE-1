@@ -7,10 +7,6 @@ using namespace std;
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	/*
-	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
-	*/
-
 	Action accion = actIDLE;
 
 	// Mostrar el valor de los sensores
@@ -39,6 +35,65 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << "\nColision: " << sensores.colision;
 	cout << "  Reset: " << sensores.reset;
 	cout << "  Vida: " << sensores.vida << endl<< endl;
+
+	// Ultima accion --> actualización del mundo
+	switch(last_action)
+	{
+		case actWALK:      //.............
+		case actRUN:       //.............
+		case actTURN_SR:   //.............
+		case actTURN_L:    //.............
+		case actIDLE:      //.............
+	}
+
+	// Brujula --> siguiente acción a realizar
+	if (brujula == norte) {
+
+		//...................
+
+
+	} else if (brujula == noreste) {
+
+		//..................
+
+
+	} else if (brujula == este) {
+
+		//...................
+
+
+	} else if (brujula == sureste) {
+
+		//....................
+
+
+	} else if (brujula == sur) {
+
+		//..................
+
+
+	} else if (brujula == suroeste) { 
+
+		//................
+
+
+	} else if (brujula == oeste) {
+
+		//..................
+
+
+	} else { // brujula == noroeste
+
+		//.................
+
+	}
+	last_action = accion;
+
+
+	/*
+	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
+	*/
+
 
 	// Determinar el efecto de la ultima accion enviada y devolverla
 	return accion;
