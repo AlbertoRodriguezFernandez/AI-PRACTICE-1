@@ -7,8 +7,7 @@ using namespace std;
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	Action accion = actIDLE;
-
+	
 	// Mostrar el valor de los sensores
 	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
 	
@@ -35,67 +34,81 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << "\nColision: " << sensores.colision;
 	cout << "  Reset: " << sensores.reset;
 	cout << "  Vida: " << sensores.vida << endl<< endl;
+	
+	// ---------------------------------------------------------------------------------------------
+	
+	Action accion = actIDLE;
+	int a;
 
 	// Ultima accion --> actualización del mundo
 	switch(last_action)
 	{
-		case actWALK:      //.............
-		case actRUN:       //.............
-		case actTURN_SR:   //.............
-		case actTURN_L:    //.............
-		case actIDLE:      //.............
+		case actWALK:   
+
+			switch (current_state.brujula)
+			{			
+			case norte :   current_state.fil--;                      break;
+			case noreste:  current_state.fil--; current_state.col++; break; 
+			case este:     current_state.col++;                      break;
+			case sureste:  current_state.fil++; current_state.col++; break;
+			case sur:      current_state.fil++;                      break;
+			case suroeste: current_state.fil++; current_state.col--; break;
+			case oeste:    current_state.fil--;                      break;
+			case noroeste: current_state.fil--; current_state.col--; break;
+			}
+
+		break; 
+
+		case actRUN:      
+
+			switch (current_state.brujula)
+			{			
+			case norte :   current_state.fil-=2;                        break;
+			case noreste:  current_state.fil-=2; current_state.col+=2;  break; 
+			case este:     current_state.col+=2;                        break;
+			case sureste:  current_state.fil+=2; current_state.col+=2;  break;
+			case sur:      current_state.fil+=2;                        break;
+			case suroeste: current_state.fil+=2; current_state.col-=2;  break;
+			case oeste:    current_state.fil-=2;                        break;
+			case noroeste: current_state.fil-=2; current_state.col-=2;  break;
+			}
+
+		break;
+
+		case actTURN_SR:  
+
+			a = current_state.brujula;
+			a = (a + 1) % 8;
+			current_state.brujula = static_cast<Orientacion>(a);
+			
+		break;
+
+		case actTURN_L: 
+
+			a = current_state.brujula;
+			a = (a + 7) % 8;
+			current_state.brujula = static_cast<Orientacion>(a);
+
+		break;	      
 	}
 
-	// Brujula --> siguiente acción a realizar
-	if (brujula == norte) {
+	// Movimiento del agente
+	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S') && sensores.agentes[2] == '_') {
 
-		//...................
+		accion = actWALK;
+	
+	} else {
 
-
-	} else if (brujula == noreste) {
-
-		//..................
-
-
-	} else if (brujula == este) {
-
-		//...................
-
-
-	} else if (brujula == sureste) {
-
-		//....................
-
-
-	} else if (brujula == sur) {
-
-		//..................
-
-
-	} else if (brujula == suroeste) { 
-
-		//................
-
-
-	} else if (brujula == oeste) {
-
-		//..................
-
-
-	} else { // brujula == noroeste
-
-		//.................
-
+		accion = actTURN_L;
 	}
-	last_action = accion;
-
 
 	/*
 	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
 	*/
 
 
-	// Determinar el efecto de la ultima accion enviada y devolverla
+	// Devolver el valor de la accion
+	last_action = accion;
 	return accion;
 }
 
