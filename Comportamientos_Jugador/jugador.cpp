@@ -7,8 +7,7 @@ using namespace std;
 Action ComportamientoJugador::think(Sensores sensores)
 {
 
-	
-	// Mostrar el valor de los sensores
+	// VALOR SENSORES 
 	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
 	
 	switch (sensores.sentido)
@@ -35,8 +34,9 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << "  Reset: " << sensores.reset;
 	cout << "  Vida: " << sensores.vida << endl<< endl;
 	
-	// ---------------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
 	
+
 	Action accion = actIDLE;
 	int a;
 
@@ -97,9 +97,15 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 		accion = actWALK;
 	
-	} else {
+	} else if (!girar_derecha) {
 
 		accion = actTURN_L;
+		girar_derecha = (rand() % 2 == 0);
+	
+	} else {
+
+		accion = actTURN_SR;
+		girar_derecha = (rand() % 2 == 0);
 	}
 
 	/*

@@ -27,7 +27,8 @@ class ComportamientoJugador : public Comportamiento{
       // TO-DO: Dar el valor inicial a las variables de estado
       last_action = actIDLE;
       current_state.fil = current_state.col = 99;
-      current_state.brujula = norte;      
+      current_state.brujula = norte;    
+      girar_derecha = false;  
     }
 
     // Constructor de copia
@@ -48,6 +49,7 @@ class ComportamientoJugador : public Comportamiento{
   // TO-DO: Declarar aquí las variables de estado que almacenan memoria sobre lo que lleva conocido el agente sobre el mundo
   Action last_action;
   state current_state;
+  bool girar_derecha;
 };
 
 #endif
