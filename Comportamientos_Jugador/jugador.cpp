@@ -53,7 +53,7 @@ void ComportamientoJugador::actualiza_juego() {
 			case sureste:  current_state.fil++; current_state.col++; break;
 			case sur:      current_state.fil++;                      break;
 			case suroeste: current_state.fil++; current_state.col--; break;
-			case oeste:    current_state.fil--;                      break;
+			case oeste:    current_state.col--;                      break;
 			case noroeste: current_state.fil--; current_state.col--; break;
 			}
 
@@ -69,7 +69,7 @@ void ComportamientoJugador::actualiza_juego() {
 			case sureste:  current_state.fil+=2; current_state.col+=2;  break;
 			case sur:      current_state.fil+=2;                        break;
 			case suroeste: current_state.fil+=2; current_state.col-=2;  break;
-			case oeste:    current_state.fil-=2;                        break;
+			case oeste:    current_state.col-=2;                        break;
 			case noroeste: current_state.fil-=2; current_state.col-=2;  break;
 			}
 
