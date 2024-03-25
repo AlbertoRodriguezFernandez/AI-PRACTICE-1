@@ -36,7 +36,7 @@ void ComportamientoJugador::valor_sensores(Sensores sensores) {
 
 
 // Método actualiza_juego
-state ComportamientoJugador::actualiza_juego() {
+void ComportamientoJugador::actualiza_juego() {
 
 	// Ultima accion --> actualización del mundo
 	int nueva_orientacion; 
@@ -86,13 +86,11 @@ state ComportamientoJugador::actualiza_juego() {
 		case actTURN_L: 
 
 			nueva_orientacion = current_state.brujula;
-			nueva_orientacion = (nueva_orientacion + 7) % 8;
+			nueva_orientacion = (nueva_orientacion + 6) % 8;
 			current_state.brujula = static_cast<Orientacion>(nueva_orientacion);
 
 		break;	      
 	}
-
-	return current_state;
 }
 
 
@@ -107,22 +105,21 @@ void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st,
 
 
 // Método movimiento_agente
-Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion, state estado) {
+Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion) {
 
 	// Casilla de posicionamiento
 	if (sensores.terreno[0] == 'G' && !bien_situado) {
 
-		estado.fil = sensores.posF;
-		estado.col = sensores.posC;
-		estado.brujula = sensores.sentido;
+		current_state.fil = sensores.posF;
+		current_state.col = sensores.posC;
+		current_state.brujula = sensores.sentido;
 		bien_situado = true;
 	}
-
 
 	// 	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
 	if (bien_situado) {
 
-		mapaResultado[estado.fil][estado.col] = sensores.terreno[0];
+		mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
 		// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
 	}
 
@@ -155,10 +152,10 @@ Action ComportamientoJugador::think(Sensores sensores)
 	this->valor_sensores(sensores);
 
 	// LLamada a método actualiza_juego
-	state estado = this->actualiza_juego();
+	this->actualiza_juego();
 	
 	// LLamada a movimiento_agente
-	accion = this->movimiento_agente(sensores, accion, estado);
+	accion = this->movimiento_agente(sensores, accion);
 
 	// Devolver el valor de la accion
 	last_action = accion;

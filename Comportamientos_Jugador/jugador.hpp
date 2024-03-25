@@ -48,10 +48,10 @@ class ComportamientoJugador : public Comportamiento{
     void valor_sensores(Sensores sensores);
 
     // Método que actualiza el mundo
-    state actualiza_juego();
+    void actualiza_juego();
 
     // Método de movimiento del agente
-    Action movimiento_agente(Sensores sensores, Action accion, state estado);
+    Action movimiento_agente(Sensores sensores, Action accion);
 
     // Método que se encarga de colocar toda la info en sensor terreno
     void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
