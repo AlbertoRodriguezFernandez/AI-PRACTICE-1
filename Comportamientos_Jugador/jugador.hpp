@@ -29,6 +29,7 @@ class ComportamientoJugador : public Comportamiento{
       current_state.fil = current_state.col = 99;
       current_state.brujula = norte;    
       girar_derecha = false;  
+      bien_situado = false;
     }
 
     // Constructor de copia
@@ -43,13 +44,26 @@ class ComportamientoJugador : public Comportamiento{
     // Método interact --> descibe como interacciona agente con otros agentes
     int interact(Action accion, int valor);
 
+    // Método que guarda todos los couts de los sensores
+    void valor_sensores(Sensores sensores);
+
+    // Método que actualiza el mundo
+    state actualiza_juego();
+
+    // Método de movimiento del agente
+    Action movimiento_agente(Sensores sensores, Action accion, state estado);
+
+    // Método que se encarga de colocar toda la info en sensor terreno
+    void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
+
 
   private:
   
-  // TO-DO: Declarar aquí las variables de estado que almacenan memoria sobre lo que lleva conocido el agente sobre el mundo
-  Action last_action;
-  state current_state;
-  bool girar_derecha;
+    // TO-DO: Declarar aquí las variables de estado que almacenan memoria sobre lo que lleva conocido el agente sobre el mundo
+    Action last_action;
+    state current_state;
+    bool girar_derecha;
+    bool bien_situado;
 };
 
 #endif

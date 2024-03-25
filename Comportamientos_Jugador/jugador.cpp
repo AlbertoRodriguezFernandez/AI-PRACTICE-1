@@ -3,9 +3,8 @@
 using namespace std;
 
 
-// Método think
-Action ComportamientoJugador::think(Sensores sensores)
-{
+// Método valor_sensores
+void ComportamientoJugador::valor_sensores(Sensores sensores) {
 
 	// VALOR SENSORES 
 	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
@@ -33,14 +32,15 @@ Action ComportamientoJugador::think(Sensores sensores)
 	cout << "\nColision: " << sensores.colision;
 	cout << "  Reset: " << sensores.reset;
 	cout << "  Vida: " << sensores.vida << endl<< endl;
-	
-	// ----------------------------------------------------------------------------
-	
+}
 
-	Action accion = actIDLE;
-	int a;
+
+// Método actualiza_juego
+state ComportamientoJugador::actualiza_juego() {
 
 	// Ultima accion --> actualización del mundo
+	int nueva_orientacion; 
+
 	switch(last_action)
 	{
 		case actWALK:   
@@ -77,23 +77,57 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 		case actTURN_SR:  
 
-			a = current_state.brujula;
-			a = (a + 1) % 8;
-			current_state.brujula = static_cast<Orientacion>(a);
+			nueva_orientacion = current_state.brujula;
+			nueva_orientacion = (nueva_orientacion + 1) % 8;
+			current_state.brujula = static_cast<Orientacion>(nueva_orientacion);
 			
 		break;
 
 		case actTURN_L: 
 
-			a = current_state.brujula;
-			a = (a + 7) % 8;
-			current_state.brujula = static_cast<Orientacion>(a);
+			nueva_orientacion = current_state.brujula;
+			nueva_orientacion = (nueva_orientacion + 7) % 8;
+			current_state.brujula = static_cast<Orientacion>(nueva_orientacion);
 
 		break;	      
 	}
 
-	// Movimiento del agente
-	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S') && sensores.agentes[2] == '_') {
+	return current_state;
+}
+
+
+/*
+// Método PonerTerrenoEnMatriz
+void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz) {
+
+	matriz[st.fil][st.col] = terreno[0];
+
+}
+*/
+
+
+// Método movimiento_agente
+Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion, state estado) {
+
+	// Casilla de posicionamiento
+	if (sensores.terreno[0] == 'G' && !bien_situado) {
+
+		estado.fil = sensores.posF;
+		estado.col = sensores.posC;
+		estado.brujula = sensores.sentido;
+		bien_situado = true;
+	}
+
+
+	// 	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
+	if (bien_situado) {
+
+		mapaResultado[estado.fil][estado.col] = sensores.terreno[0];
+		// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
+	}
+
+	// Nueva accion
+	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G') && sensores.agentes[2] == '_') {
 
 		accion = actWALK;
 	
@@ -108,10 +142,23 @@ Action ComportamientoJugador::think(Sensores sensores)
 		girar_derecha = (rand() % 2 == 0);
 	}
 
-	/*
-	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
-	*/
+	return accion;
+}
 
+
+// Método think
+Action ComportamientoJugador::think(Sensores sensores)
+{
+	Action accion = actIDLE;
+
+	// LLamada a método valor_sensores
+	this->valor_sensores(sensores);
+
+	// LLamada a método actualiza_juego
+	state estado = this->actualiza_juego();
+	
+	// LLamada a movimiento_agente
+	accion = this->movimiento_agente(sensores, accion, estado);
 
 	// Devolver el valor de la accion
 	last_action = accion;
