@@ -6,7 +6,6 @@ using namespace std;
 // Método valor_sensores
 void ComportamientoJugador::valor_sensores(Sensores sensores) {
 
-	// VALOR SENSORES 
 	cout << "Posicion: fila " << sensores.posF << " columna " << sensores.posC;
 	
 	switch (sensores.sentido)
@@ -38,7 +37,6 @@ void ComportamientoJugador::valor_sensores(Sensores sensores) {
 // Método actualiza_juego
 void ComportamientoJugador::actualiza_juego() {
 
-	// Ultima accion --> actualización del mundo
 	int nueva_orientacion; 
 
 	switch(last_action)
@@ -116,14 +114,7 @@ Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion
 		bien_situado = true;
 	}
 
-	// 	TO-DO: en la matriz mapaResultado se ha de colocar lo que se descubre en el mapa	
-	if (bien_situado) {
-
-		mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
-		// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
-	}
-
-	// Nueva accion
+	// Accion
 	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G') && sensores.agentes[2] == '_') {
 
 		accion = actWALK;
@@ -137,6 +128,13 @@ Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion
 
 		accion = actTURN_SR;
 		girar_derecha = (rand() % 2 == 0);
+	}
+
+	// Guardar en mapaResultado
+	if (bien_situado) {
+
+		mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
+		// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
 	}
 
 	return accion;
