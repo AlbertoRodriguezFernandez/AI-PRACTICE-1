@@ -115,7 +115,7 @@ Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion
 	}
 
 	// Zapatillas
-	if (sensores.terreno[2] == 'D' && !tengo_zapatillas) {
+	if (sensores.terreno[0] == 'D' && !tengo_zapatillas) {
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
@@ -124,13 +124,18 @@ Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion
 	}
 
 	// Bikini
-	if (sensores.terreno[2] == 'K' && !tengo_bikini) {
+	if (sensores.terreno[0] == 'K' && !tengo_bikini) {
 
 		current_state.fil = sensores.posF;
 		current_state.col = sensores.posC;
 		current_state.brujula = sensores.sentido;
 		tengo_bikini = true;
 	}
+
+	/*
+	TO-DO:
+		Analizar que pasa lo de la primera posicion
+		Analizar que hacer si caigo directamente en bosque, o en agua o justo al lado de un precipio*/
 
 	// Accion
 	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K') && sensores.agentes[2] == '_') {
