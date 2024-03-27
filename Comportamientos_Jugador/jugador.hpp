@@ -24,13 +24,14 @@ class ComportamientoJugador : public Comportamiento{
     // Constructor
     ComportamientoJugador(unsigned int size) : Comportamiento(size){
       
-      
       // Inicializar variables de estado
       last_action = actIDLE;
       current_state.fil = current_state.col = 99;
       current_state.brujula = norte;    
       girar_derecha = false;  
       bien_situado = false;
+      tengo_zapatillas = false;
+      tengo_bikini = false;
     }
 
 
@@ -73,6 +74,8 @@ class ComportamientoJugador : public Comportamiento{
     state current_state;
     bool girar_derecha;
     bool bien_situado;
+    bool tengo_zapatillas;
+    bool tengo_bikini;
 };
 
 #endif

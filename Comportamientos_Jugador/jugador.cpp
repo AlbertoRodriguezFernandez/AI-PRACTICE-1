@@ -114,6 +114,34 @@ Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion
 		bien_situado = true;
 	}
 
+	// Zapatillas
+	if (sensores.terreno[0] == 'D' && !tengo_zapatillas) {
+
+		current_state.fil = sensores.posF;
+		current_state.col = sensores.posC;
+		current_state.brujula = sensores.sentido;
+		tengo_zapatillas = true;
+	}
+
+	if (tengo_zapatillas && sensores.terreno[0] == 'B') {
+
+		accion = actWALK;
+	}
+
+	// Bikini
+	if (sensores.terreno[0] == 'K' && !tengo_bikini) {
+
+		current_state.fil = sensores.posF;
+		current_state.col = sensores.posC;
+		current_state.brujula = sensores.sentido;
+		tengo_bikini = true;
+	}
+
+	if (tengo_bikini && sensores.terreno[0] == 'A') {
+
+		accion = actWALK;
+	}
+
 	// Accion
 	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G') && sensores.agentes[2] == '_') {
 
