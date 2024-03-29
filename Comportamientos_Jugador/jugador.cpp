@@ -116,11 +116,10 @@ Action ComportamientoJugador::think(Sensores sensores)
 	TO-DO:
 		Analizar que hacer si caigo directamente en bosque, o en agua o justo al lado de un precipio
 	*/
-	
-	
+		
 	if (sensores.terreno.size() != 0 && sensores.agentes.size() != 0) {
 		
-		/*
+		
 		// Casilla de posicionamiento
 		if (sensores.terreno[0] == 'G' && !bien_situado) {
 
@@ -148,7 +147,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 			tengo_bikini = true;
 		}
 		
-		
+		/*
 		if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K') && sensores.agentes[2] == '_') {
 
 			accion = actWALK;
@@ -171,6 +170,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 			accion = actTURN_SR;
 			girar_derecha = (rand() % 2 == 0);
 		}
+		*/
 
 		// Guardar en mapaResultado
 		if (bien_situado) {
@@ -178,7 +178,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 			mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
 			// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
 		}
-		*/
+		
 
 	} else {
 
