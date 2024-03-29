@@ -114,13 +114,13 @@ Action ComportamientoJugador::think(Sensores sensores)
 	// Accion
 	/*
 	TO-DO:
-		Analizar que pasa lo de la primera posicion
 		Analizar que hacer si caigo directamente en bosque, o en agua o justo al lado de un precipio
 	*/
 	
-	/*
+	
 	if (sensores.terreno.size() != 0 && sensores.agentes.size() != 0) {
 		
+		/*
 		// Casilla de posicionamiento
 		if (sensores.terreno[0] == 'G' && !bien_situado) {
 
@@ -178,14 +178,14 @@ Action ComportamientoJugador::think(Sensores sensores)
 			mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
 			// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
 		}
-		
+		*/
 
 	} else {
 
 		cerr << "Vectores vacios" << endl;
 		accion = actIDLE;
 	}
-	*/
+	
 
 	// Devolver el valor de la accion
 	last_action = accion;
