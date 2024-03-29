@@ -39,7 +39,6 @@ void ComportamientoJugador::valor_sensores(Sensores sensores) {
 void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz) {
 
 	matriz[st.fil][st.col] = terreno[0];
-
 }
 */
 
@@ -112,13 +111,14 @@ Action ComportamientoJugador::think(Sensores sensores)
 	}
 
 	// Accion
-	/*
-	TO-DO:
-		Analizar que hacer si caigo directamente en bosque, o en agua o justo al lado de un precipio
-	*/
-		
+
+	// 1º: Buscar casilla de posicionamiento
+	// 2º: Buscar bikini y zapatillas
+	// 3º: No repetir movimiento a casillas visitadas
+	// 3º: Gestionar precipios y muros
+	// 4º: Gestionar aldeanos y lobos
+
 	if (sensores.terreno.size() != 0 && sensores.agentes.size() != 0) {
-		
 		
 		// Casilla de posicionamiento
 		if (sensores.terreno[0] == 'G' && !bien_situado) {
@@ -146,9 +146,17 @@ Action ComportamientoJugador::think(Sensores sensores)
 			current_state.brujula = sensores.sentido;
 			tengo_bikini = true;
 		}
-		
-		/*
-		if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K') && sensores.agentes[2] == '_') {
+
+		// Bateria
+		if (sensores.terreno[0] == 'X' && sensores.bateria <= 4990) {
+			
+			current_state.fil = sensores.posF;
+			current_state.col = sensores.posC;
+			current_state.brujula = sensores.sentido;
+			sensores.bateria += 10;
+		}
+
+		if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K' || sensores.terreno[2] == 'X') && sensores.agentes[2] == '_' ) {
 
 			accion = actWALK;
 		
@@ -170,7 +178,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 			accion = actTURN_SR;
 			girar_derecha = (rand() % 2 == 0);
 		}
-		*/
+		
 
 		// Guardar en mapaResultado
 		if (bien_situado) {
