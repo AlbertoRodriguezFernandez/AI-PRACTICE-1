@@ -34,11 +34,26 @@ void ComportamientoJugador::valor_sensores(Sensores sensores) {
 }
 
 
-// Método actualiza_juego
-void ComportamientoJugador::actualiza_juego() {
+/*
+// Método PonerTerrenoEnMatriz
+void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz) {
 
-	int nueva_orientacion; 
+	matriz[st.fil][st.col] = terreno[0];
 
+}
+*/
+
+
+// Método think
+Action ComportamientoJugador::think(Sensores sensores)
+{
+	Action accion = actIDLE;
+	int nueva_orientacion;
+
+	// Imprimir valor de los sensores
+	this->valor_sensores(sensores);
+
+	// Actualización variables de estado
 	switch(last_action)
 	{
 		case actWALK:   
@@ -87,104 +102,90 @@ void ComportamientoJugador::actualiza_juego() {
 			nueva_orientacion = (nueva_orientacion + 6) % 8;
 			current_state.brujula = static_cast<Orientacion>(nueva_orientacion);
 
-		break;	      
-	}
-}
+		break;	   
 
+		case actIDLE:
 
-/*
-// Método PonerTerrenoEnMatriz
-void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz) {
+			cout << "No se hace nada" << endl;
 
-	matriz[st.fil][st.col] = terreno[0];
-
-}
-*/
-
-
-// Método movimiento_agente
-Action ComportamientoJugador::movimiento_agente(Sensores sensores, Action accion) {
-
-	// Casilla de posicionamiento
-	if (sensores.terreno[0] == 'G' && !bien_situado) {
-
-		current_state.fil = sensores.posF;
-		current_state.col = sensores.posC;
-		current_state.brujula = sensores.sentido;
-		bien_situado = true;
+		break;   
 	}
 
-	// Zapatillas
-	if (sensores.terreno[0] == 'D' && !tengo_zapatillas) {
-
-		current_state.fil = sensores.posF;
-		current_state.col = sensores.posC;
-		current_state.brujula = sensores.sentido;
-		tengo_zapatillas = true;
-	}
-
-	// Bikini
-	if (sensores.terreno[0] == 'K' && !tengo_bikini) {
-
-		current_state.fil = sensores.posF;
-		current_state.col = sensores.posC;
-		current_state.brujula = sensores.sentido;
-		tengo_bikini = true;
-	}
-
+	// Accion
 	/*
 	TO-DO:
 		Analizar que pasa lo de la primera posicion
-		Analizar que hacer si caigo directamente en bosque, o en agua o justo al lado de un precipio*/
-
-	// Accion
-	if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K') && sensores.agentes[2] == '_') {
-
-		accion = actWALK;
+		Analizar que hacer si caigo directamente en bosque, o en agua o justo al lado de un precipio
+	*/
 	
-	} else if (tengo_bikini && sensores.terreno[2] == 'A') {
+	/*
+	if (sensores.terreno.size() != 0 && sensores.agentes.size() != 0) {
+		
+		// Casilla de posicionamiento
+		if (sensores.terreno[0] == 'G' && !bien_situado) {
 
-		accion = actWALK;
+			current_state.fil = sensores.posF;
+			current_state.col = sensores.posC;
+			current_state.brujula = sensores.sentido;
+			bien_situado = true;
+		}
 
-	} else if (tengo_zapatillas && sensores.terreno[2] == 'B') {
+		// Zapatillas
+		if (sensores.terreno[0] == 'D' && !tengo_zapatillas) {
 
-		accion = actWALK;
+			current_state.fil = sensores.posF;
+			current_state.col = sensores.posC;
+			current_state.brujula = sensores.sentido;
+			tengo_zapatillas = true;
+		}
 
-	} else if (!girar_derecha) {
+		// Bikini
+		if (sensores.terreno[0] == 'K' && !tengo_bikini) {
 
-		accion = actTURN_L;
-		girar_derecha = (rand() % 2 == 0);
-	
+			current_state.fil = sensores.posF;
+			current_state.col = sensores.posC;
+			current_state.brujula = sensores.sentido;
+			tengo_bikini = true;
+		}
+		
+		
+		if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K') && sensores.agentes[2] == '_') {
+
+			accion = actWALK;
+		
+		} else if (tengo_bikini && sensores.terreno[2] == 'A') {
+
+			accion = actWALK;
+
+		} else if (tengo_zapatillas && sensores.terreno[2] == 'B') {
+
+			accion = actWALK;
+
+		} else if (!girar_derecha) {
+
+			accion = actTURN_L;
+			girar_derecha = (rand() % 2 == 0);
+		
+		} else {
+
+			accion = actTURN_SR;
+			girar_derecha = (rand() % 2 == 0);
+		}
+
+		// Guardar en mapaResultado
+		if (bien_situado) {
+
+			mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
+			// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
+		}
+		
+
 	} else {
 
-		accion = actTURN_SR;
-		girar_derecha = (rand() % 2 == 0);
+		cerr << "Vectores vacios" << endl;
+		accion = actIDLE;
 	}
-
-	// Guardar en mapaResultado
-	if (bien_situado) {
-
-		mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
-		// PonerTerrenoEnMatriz(sensores.terreno, current_state, mapaResultado);
-	}
-
-	return accion;
-}
-
-
-// Método think
-Action ComportamientoJugador::think(Sensores sensores)
-{
-	Action accion = actIDLE;
-
-	// LLamada a método valor_sensores
-	this->valor_sensores(sensores);
-
-	// LLamada a método actualiza_juego
-	this->actualiza_juego();
-	
-	// LLamada a movimiento_agente
-	accion = this->movimiento_agente(sensores, accion);
+	*/
 
 	// Devolver el valor de la accion
 	last_action = accion;
