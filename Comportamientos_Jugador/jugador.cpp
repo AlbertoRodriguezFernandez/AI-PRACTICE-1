@@ -147,26 +147,24 @@ Action ComportamientoJugador::think(Sensores sensores)
 			tengo_bikini = true;
 		}
 
-		// Bateria
-		if (sensores.terreno[0] == 'X' && sensores.bateria <= 4990) {
-			
-			current_state.fil = sensores.posF;
-			current_state.col = sensores.posC;
-			current_state.brujula = sensores.sentido;
-			sensores.bateria += 10;
-		}
-
 		if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K' || sensores.terreno[2] == 'X') && sensores.agentes[2] == '_' ) {
 
 			accion = actWALK;
-		
+
+		// Agua
 		} else if (tengo_bikini && sensores.terreno[2] == 'A') {
 
 			accion = actWALK;
 
+		// Bikini
 		} else if (tengo_zapatillas && sensores.terreno[2] == 'B') {
 
 			accion = actWALK;
+
+		// Bateria
+		} else if (sensores.terreno[2] == 'X' && sensores.bateria <= 4990) {
+
+			sensores.bateria += 10;
 
 		} else if (!girar_derecha) {
 
