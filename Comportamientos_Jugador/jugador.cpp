@@ -145,8 +145,91 @@ Action ComportamientoJugador::think(Sensores sensores)
 		}
 		
 
-	-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+	----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+	*/
+
+	// Comprobar en que nivel estoy
+
+	if (sensores.terreno.size() != 0 && sensores.agentes.size() != 0) {
+
+		// Niveles 1,2,3
+		if (sensores.posF == -1 && sensores.posC == -1) {
+
+			cout << "Hola" << endl;
+
+		// Nivel 0
+		} else {
+
+			// Situarse bien
+			if (sensores.terreno[0] != 'M' && sensores.terreno[0] != 'P' && !bien_situado) {
+
+				current_state.fil = sensores.posF;
+				current_state.col = sensores.posC;
+				current_state.brujula = sensores.sentido;
+				bien_situado = true;
+			}
+
+			if (bien_situado) {
+
+				mapaResultado[current_state.fil][current_state.col] = sensores.terreno[0];
+			}
+
+			// Zapatillas
+			if (sensores.terreno[0] == 'D' && !tengo_zapatillas) {
+
+				current_state.fil = sensores.posF;
+				current_state.col = sensores.posC;
+				current_state.brujula = sensores.sentido;
+				tengo_zapatillas = true;
+			}
+
+			// Bikini
+			if (sensores.terreno[0] == 'K' && !tengo_bikini) {
+
+				current_state.fil = sensores.posF;
+				current_state.col = sensores.posC;
+				current_state.brujula = sensores.sentido;
+				tengo_bikini = true;
+			}
+
+			if ((sensores.terreno[2] == 'T' || sensores.terreno[2] == 'S' || sensores.terreno[2] == 'G' || sensores.terreno[2] == 'D' || sensores.terreno[2] == 'K' || sensores.terreno[2] == 'X') && sensores.agentes[2] == '_' ) {
+
+				accion = actWALK;
+
+			// Agua
+			} else if (tengo_bikini && sensores.terreno[2] == 'A') {
+
+				accion = actWALK;
+
+			// Bikini
+			} else if (tengo_zapatillas && sensores.terreno[2] == 'B') {
+
+				accion = actWALK;
+
+			} else if (!girar_derecha) {
+
+				accion = actTURN_L;
+				girar_derecha = (rand() % 2 == 0);
+			
+			} else {
+
+				accion = actTURN_SR;
+				girar_derecha = (rand() % 2 == 0);
+			}
+		}
+
+
+	} else {
+
+		cerr << "Vectores vacios" << endl;
+		accion = actIDLE;
+	}
+
+
+
+
+	/*
 	if (sensores.terreno.size() != 0 && sensores.agentes.size() != 0) {
 		
 		// Casilla de posicionamiento
@@ -221,6 +304,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 		accion = actIDLE;
 	}
 	*/
+	
 	
 
 	// Devolver el valor de la accion
