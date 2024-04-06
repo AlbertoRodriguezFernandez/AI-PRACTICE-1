@@ -23,6 +23,8 @@ class ComportamientoJugador : public Comportamiento{
   public:
 
     static const int POS_DESCONOCIDA = -1; // Valor fuera de rango porque no se la pos
+    static const int TAM_MAX_VECTOR_SENSORES_VISION = 16; // Valor que indica que el jugador tiene 16 casillas de vision
+    static const int TAM_MIN_VECTOR_SENSORES_VISION = 1; // Valor que indica que el jugador siempre tiene la suya como minima
 
     // Constructor
     ComportamientoJugador(unsigned int size) : Comportamiento(size){
@@ -30,10 +32,10 @@ class ComportamientoJugador : public Comportamiento{
       last_action = actIDLE;
       current_state.fil = current_state.col = POS_DESCONOCIDA;  
 
-      // Deliberadamente no inicializado current_state.brujula porque necesito el nivel y eso lo hare en el think  
+      // NO inicializo current_state.brujula porque necesito el nivel y eso lo hare en el think  
       current_state.brujula_desconocida = true;
        
-      bien_situado = false;
+      //bien_situado = false;
       tengo_zapatillas = false;
       tengo_bikini = false;
 
@@ -52,7 +54,7 @@ class ComportamientoJugador : public Comportamiento{
 
       last_action = comport.last_action;
       current_state = comport.current_state;
-      bien_situado = comport.bien_situado;
+      //bien_situado = comport.bien_situado;
       tengo_zapatillas = comport.tengo_zapatillas;
       tengo_bikini = comport.tengo_bikini;
       matriz_ultimas_visitas = comport.matriz_ultimas_visitas;
@@ -80,7 +82,7 @@ class ComportamientoJugador : public Comportamiento{
 
 
     // Método que se encarga de colocar toda la info en sensor terreno
-    void PonerTerrenoEnMatriz(const vector<unsigned char> &terreno, const state &st, vector<vector<unsigned char>> &matriz);
+    void guardar_mapaResultado(const vector<unsigned char> &terreno);
 
 
   private:
@@ -88,8 +90,10 @@ class ComportamientoJugador : public Comportamiento{
     // Variables de estado de memoria del agente
     Action last_action;
     state current_state;
-    bool bien_situado;
-    bool tengo_zapatillas;
+    //bool bien_situado;
+
+    // Necesitamos variables de estado ya que no hay sensor que detecte si el agente tiene zapatillas o bikini
+    bool tengo_zapatillas; 
     bool tengo_bikini;
     vector<vector<double>> matriz_ultimas_visitas;
 };
