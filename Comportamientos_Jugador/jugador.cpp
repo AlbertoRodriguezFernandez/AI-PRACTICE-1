@@ -34,7 +34,8 @@ void ComportamientoJugador::valor_sensores(Sensores sensores) {
 	cout << "\nColision: " << sensores.colision;
 	cout << "  Reset: " << sensores.reset;
 	cout << "  Vida: " << sensores.vida;
-	cout << " Tiempo: " << sensores.tiempo << endl << endl;
+	cout << " Tiempo: " << sensores.tiempo; 
+	cout << " Bateria: " << sensores.bateria << endl << endl;
 }
 
 
@@ -258,8 +259,24 @@ Action ComportamientoJugador::think(Sensores sensores)
 		current_state.col = sensores.posC;
 		current_state.brujula = sensores.sentido;
 		current_state.brujula_desconocida = false;
-	
-	} else {
+
+	// Gestion de reinicios
+	} else if (sensores.reset) {
+
+		int min_indice_mapa = 3;
+		int max_indice_mapa = mapaResultado.size() - 4; 
+		
+		current_state.fil = -1;
+		current_state.col = -1;
+		current_state.brujula = norte;
+		current_state.brujula_desconocida = false;
+
+		tengo_bikini = false;
+		tengo_zapatillas = false;
+
+		//TODO: que debe recordar / olvidar
+
+	}  else {
 
 		// 2. Ultima accion
 		switch(last_action)
@@ -328,26 +345,37 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 	}
 
-	// Imprimo el valor del estado actual para ver si hubo algun error
-	valor_current_state();
-
-	// Posicion actual
+	// Posicion actual de terreno
 	switch(sensores.terreno[0]) {
 
 		case 'D': tengo_zapatillas = true; break;
 		case 'K': tengo_bikini = true;     break;
-		
+		case 'G': 
+			
+			if (current_state.fil != POS_DESCONOCIDA && current_state.col != POS_DESCONOCIDA) {
 
+				current_state.fil = sensores.posF;
+				current_state.col = sensores.posC;
+				current_state.brujula = sensores.sentido;
+				current_state.brujula_desconocida = false;
+
+				casilla_posicionamiento = true;
+			}
+
+			break;
 	}
 
-	// Si conozco la pos guardo el INSTANTE en el que paso por la casilla que sea y Actualizo mapaResultado
 
+	// Si conozco la pos guardo el INSTANTE en el que paso por la casilla que sea y Actualizo mapaResultado
 	if (current_state.fil != POS_DESCONOCIDA && current_state.col != POS_DESCONOCIDA) {
 
 		matriz_ultimas_visitas[current_state.fil][current_state.col] = sensores.tiempo;
 		guardar_mapaResultado(sensores.terreno);
+		
 	}
-
+	
+	// Imprimo el valor del estado actual para ver si hubo algun error
+	valor_current_state();
 
 	
 
@@ -371,9 +399,9 @@ Action ComportamientoJugador::think(Sensores sensores)
 
 			matriz_ultimas_visitas[fil][col] == sensores.tiempo
 
-		3. sensores.terreno (1 de 16)  *
+		3. sensores.terreno 
  
-		4. sensores.agentes (1 de 16)  *
+		4. sensores.agentes 
 
 		5. sensores.bateria
 
@@ -384,7 +412,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 		8. sensores.nivel
 	*/
 
-	
+
 
 	// Mantenerse vivo: giro (¿Hacia Donde?) si la posicion que tengo delante no me permite avanzar o si esta ocupada por un intruso
 	if (sensores.terreno[2] == 'P' or sensores.terreno[2] == 'M' or sensores.agentes[2] == 'a' or sensores.agentes[2] == 'l') {
@@ -394,34 +422,76 @@ Action ComportamientoJugador::think(Sensores sensores)
 	
 	// Avanzo si el terreno delante es favorable y posicion por delante esta libre y que no este visitada la posicion de delante
 	} else if ((sensores.terreno[2] == 'T' or sensores.terreno[2] == 'S' or sensores.terreno[2] == 'D' or sensores.terreno[2] == 'K' 
-	            or sensores.terreno[2] == 'X' or sensores.terreno[2] == 'G') and sensores.agentes[2] == '_') {
+	            or sensores.terreno[2] == 'X' or sensores.terreno[2] == 'G') and sensores.agentes[2] == '_' and sensores.bateria > 1500) {
 		
 		next_action = actWALK;
 		cout << "next_action = actWALk" << endl << endl;
 	
 	// Avanzo al bosque si tengo las zapatillas y posicion por delante esta libre y no visitada
-	} else if (sensores.terreno[2] == 'B' and tengo_zapatillas and sensores.agentes[2] == '_') {
+	} else if (sensores.terreno[2] == 'B' and tengo_zapatillas and sensores.agentes[2] == '_' and sensores.bateria > 1500) {
 
 		next_action = actWALK;
 		cout << "next_action = actWALk" << endl << endl;
 
 	// Avanzo al agua si tengo el bikini y posicion por delante esta libre
-	} else if (sensores.terreno[2] == 'A' and tengo_bikini and sensores.agentes[2] == '_' ) {
+	} else if (sensores.terreno[2] == 'A' and tengo_bikini and sensores.agentes[2] == '_' and sensores.bateria > 1500 ) {
 
 		next_action = actWALK;
 		cout << "next_action = actWALk" << endl << endl;
 
 	// Giro (hacia donde) si el terreno que tengo delante es bosque y no tengo zapatillas
-	} else if(sensores.terreno[2] == 'B' and !tengo_zapatillas and sensores.agentes[2] == '_') {
+	} else if(sensores.terreno[2] == 'B' and !tengo_zapatillas and sensores.agentes[2] == '_' and sensores.bateria > 1500) {
 
 		next_action = actTURN_L;
-		cout << "next_action = actTURN_L" << endl << endl;
+
+		for (int i = 1; i < sensores.terreno.size(); i++) {
+
+			if (sensores.terreno[i] != 'B' and sensores.terreno[i] != 'P' and sensores.terreno[i] != 'M') {
+
+				next_action = actWALK;
+			
+			} 
+		}
+		
+		cout << "next_action " << next_action << endl << endl;
 
 	// Giro (hacia donde) si el terreno que tengo delante es agua y no tengo bikini
-	} else if(sensores.terreno[2] == 'A' and !tengo_bikini and sensores.agentes[2] == '_') {
+	} else if (sensores.terreno[2] == 'A' and !tengo_bikini and sensores.agentes[2] == '_' and sensores.bateria > 1500) {
 
 		next_action = actTURN_L;
-		cout << "next_action = actTURN_L" << endl << endl;
+
+		for (int i = 1; i < sensores.terreno.size(); i++) {
+
+			if (sensores.terreno[i] != 'A' and sensores.terreno[i] != 'P' and sensores.terreno[i] != 'M') {
+
+				next_action = actWALK;
+			
+			} 
+		}
+
+		cout << "next_action " << next_action << endl << endl;
+		
+	// Si la bateria esta ya peligrando ir rapidamente a por casilla de recarga
+	} else if (sensores.bateria <= 1500) {
+		
+		
+		next_action = actWALK;
+
+		if (sensores.terreno[2] == 'P' or sensores.terreno[2] == 'M') {
+
+			next_action = actTURN_L;
+		}
+
+		if (sensores.terreno[0] == 'X') {
+
+			if (sensores.tiempo >= 1750) {
+
+				next_action = actIDLE;
+			}
+		}
+		
+
+		cout << "next_action " << next_action << endl << endl;
 	
 	// En el caso de que no se produzca ninguna accion anterior, giro (hacia donde)
 	} else {

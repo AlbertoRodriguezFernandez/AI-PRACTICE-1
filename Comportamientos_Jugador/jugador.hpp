@@ -35,7 +35,7 @@ class ComportamientoJugador : public Comportamiento{
       // NO inicializo current_state.brujula porque necesito el nivel y eso lo hare en el think  
       current_state.brujula_desconocida = true;
        
-      //bien_situado = false;
+      casilla_posicionamiento = false;
       tengo_zapatillas = false;
       tengo_bikini = false;
 
@@ -54,7 +54,7 @@ class ComportamientoJugador : public Comportamiento{
 
       last_action = comport.last_action;
       current_state = comport.current_state;
-      //bien_situado = comport.bien_situado;
+      casilla_posicionamiento = comport.casilla_posicionamiento;
       tengo_zapatillas = comport.tengo_zapatillas;
       tengo_bikini = comport.tengo_bikini;
       matriz_ultimas_visitas = comport.matriz_ultimas_visitas;
@@ -90,11 +90,12 @@ class ComportamientoJugador : public Comportamiento{
     // Variables de estado de memoria del agente
     Action last_action;
     state current_state;
-    //bool bien_situado;
 
-    // Necesitamos variables de estado ya que no hay sensor que detecte si el agente tiene zapatillas o bikini
+    // Necesitamos variables de estado ya que no hay sensor que detecte si el agente tiene zapatillas o bikini o casilla de posicionamiento
     bool tengo_zapatillas; 
     bool tengo_bikini;
+    bool casilla_posicionamiento;
+
     vector<vector<double>> matriz_ultimas_visitas;
 };
 
